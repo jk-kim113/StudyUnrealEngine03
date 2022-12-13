@@ -23,6 +23,7 @@ public:
 	ADodgeballCharacter();
 
 	virtual void OnDeath_Implementation() override;
+	virtual void OnTakeDamage_Implementation() override;
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)

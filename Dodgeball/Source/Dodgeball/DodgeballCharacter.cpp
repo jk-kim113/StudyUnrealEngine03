@@ -10,6 +10,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "HealthComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "DodgeballPlayerController.h"
 
 //////////////////////////////////////////////////////////////////////////
 // ADodgeballCharacter
@@ -61,7 +62,20 @@ ADodgeballCharacter::ADodgeballCharacter()
 
 void ADodgeballCharacter::OnDeath_Implementation()
 {
-	UKismetSystemLibrary::QuitGame(this, nullptr, EQuitPreference::Quit, true);
+	ADodgeballPlayerController* PlayerController = Cast<ADodgeballPlayerController>(GetController());
+	if (PlayerController != nullptr)
+	{
+		PlayerController->ShowRestartWidget();
+	}
+}
+
+void ADodgeballCharacter::OnTakeDamage_Implementation()
+{
+	ADodgeballPlayerController* PlayerController = Cast<ADodgeballPlayerController>(GetController());
+	if (PlayerController != nullptr)
+	{
+		PlayerController->UpdateHealthPercent(HealthComponent->GetHealthPercent());
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
