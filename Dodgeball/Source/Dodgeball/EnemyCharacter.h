@@ -13,7 +13,7 @@ class DODGEBALL_API AEnemyCharacter : public ACharacter
 
 private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = LookAt, meta = (AllowPrivateAccess = "true"))
-	class USceneComponent* SightSource;
+	class ULookAtActorComponent* LookAtActorComponent;
 
 public:
 	// Sets default values for this character's properties
@@ -25,13 +25,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	// 전달된 액터를 바라보도록 캐릭터의 회전을 변경한다.
-	// 전달된 액터를 볼 수 있는지 여부를 반환한다.
-	bool LookAtActor(AActor* TargetActor);
-
-	// 전달된 액터를 볼 수 있는지 확인
-	bool CanSeeActor(const AActor* TargetActor) const;
 
 	void ThrowDodgeball();
 

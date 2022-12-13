@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "HealthInterface.h"
 #include "DodgeballCharacter.generated.h"
 
 UCLASS(config=Game)
-class ADodgeballCharacter : public ACharacter
+class ADodgeballCharacter : public ACharacter, public IHealthInterface
 {
 	GENERATED_BODY()
 
@@ -20,6 +21,8 @@ class ADodgeballCharacter : public ACharacter
 	class UCameraComponent* FollowCamera;
 public:
 	ADodgeballCharacter();
+
+	virtual void OnDeath_Implementation() override;
 
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
@@ -56,5 +59,8 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+private:
+	class UHealthComponent* HealthComponent;
 };
 

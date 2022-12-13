@@ -27,6 +27,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// 닷지볼이 플레이어 캐릭터에게 입힐 데미지
+	UPROPERTY(EditAnywhere, Category = Damage)
+	float Damage = 34.f;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
