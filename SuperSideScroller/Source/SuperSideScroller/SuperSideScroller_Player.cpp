@@ -4,6 +4,10 @@
 #include "SuperSideScroller_Player.h"
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Animation/AnimInstance.h"
+#include "PlayerProjectile.h"
+#include "Engine/World.h"
+#include "Components/SphereComponent.h"
 
 ASuperSideScroller_Player::ASuperSideScroller_Player()
 {
@@ -48,5 +52,33 @@ void ASuperSideScroller_Player::StopSprinting()
 
 void ASuperSideScroller_Player::ThrowProjectile()
 {
-	UE_LOG(LogTemp, Warning, TEXT("THROW PROJECTILE!"));
+	if (ThrowMontage)
+	{
+		bool bIsMontagePlaying = GetMesh()->GetAnimInstance()->Montage_IsPlaying(ThrowMontage);
+		if (!bIsMontagePlaying)
+		{
+			GetMesh()->GetAnimInstance()->Montage_Play(ThrowMontage, 2.0f);
+		}
+	}
+}
+
+void ASuperSideScroller_Player::SpawnProjectile()
+{
+	if (PlayerProjectile)
+	{
+		UWorld* World = GetWorld();
+		if (World)
+		{
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = this;
+			FVector SpawnLocation = this->GetMesh()->GetSocketLocation(FName("ProjectileSocket"));
+			FRotator Rotation = GetActorForwardVector().Rotation();
+
+			APlayerProjectile* Projectile = World->SpawnActor<APlayerProjectile>(PlayerProjectile, SpawnLocation, Rotation, SpawnParams);
+			if (Projectile)
+			{
+				Projectile->CollisionComp->MoveIgnoreActors.Add(SpawnParams.Owner);
+			}
+		}
+	}
 }

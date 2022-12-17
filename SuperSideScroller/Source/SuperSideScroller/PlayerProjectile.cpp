@@ -5,6 +5,10 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "EnemyBase.h"
+#include "Components/AudioComponent.h"
+#include "Engine/Classes/Particles/ParticleSystemComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 APlayerProjectile::APlayerProjectile()
@@ -28,9 +32,39 @@ APlayerProjectile::APlayerProjectile()
 	MeshComp->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
 
 	InitialLifeSpan = 3.0f;
+
+	ProjectileMovementSound = CreateDefaultSubobject<UAudioComponent>(TEXT("ProjectileMovementSound"));
+	ProjectileMovementSound->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
+
+	ProjectileEffect = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ProjectileEffect"));
+	ProjectileEffect->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepWorldTransform);
 }
 
 void APlayerProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	UE_LOG(LogTemp, Warning, TEXT("HIT"));
+	AEnemyBase* Enemy = Cast<AEnemyBase>(OtherActor);
+	if (Enemy)
+	{
+		Enemy->DestroyEnemy();
+	}
+
+	ExplodeProjectile();
+}
+
+void APlayerProjectile::ExplodeProjectile()
+{
+	UWorld* World = GetWorld();
+	if (World)
+	{
+		if (DestroyEffect)
+		{
+			UGameplayStatics::SpawnEmitterAtLocation(World, DestroyEffect, GetActorTransform());
+		}
+		if (DestroySound)
+		{
+			UGameplayStatics::SpawnSoundAtLocation(World, DestroySound, GetActorLocation());
+		}
+	}
+
+	Destroy();
 }

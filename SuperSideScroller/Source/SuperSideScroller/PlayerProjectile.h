@@ -22,6 +22,14 @@ public:
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
 	class USphereComponent* CollisionComp;
 
+	void ExplodeProjectile();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class UParticleSystem* DestroyEffect;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	class USoundBase* DestroySound;
+
 private:
 
 	// 프로젝타일 무브먼트 컴포넌트
@@ -31,4 +39,10 @@ private:
 	// 스태틱 메시 컴포넌트
 	UPROPERTY(VisibleDefaultsOnly, Category = Projectile)
 	class UStaticMeshComponent* MeshComp;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = Sound)
+	class UAudioComponent* ProjectileMovementSound;
+
+	UPROPERTY(VisibleDefaultsOnly, Category = Particle)
+	class UParticleSystemComponent* ProjectileEffect;
 };

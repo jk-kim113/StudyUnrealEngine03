@@ -28,10 +28,20 @@ protected:
 	// 전력 질주 정지
 	void StopSprinting();
 
+public:
+
 	//ThrowProjectile
 	void ThrowProjectile();
+
+	void SpawnProjectile();
 
 private:
 	// 전력 질주 중인지 확인하는 bool 변수. 안전장치.
 	bool bIsSprinting;
+
+	UPROPERTY(EditAnywhere)
+	class UAnimMontage* ThrowMontage;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class APlayerProjectile> PlayerProjectile;
 };
