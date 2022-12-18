@@ -28,12 +28,21 @@ protected:
 	// 전력 질주 정지
 	void StopSprinting();
 
+	void EndPowerup();
+
 public:
 
 	//ThrowProjectile
 	void ThrowProjectile();
 
 	void SpawnProjectile();
+
+	UFUNCTION(BlueprintPure)
+	int32 GetCurrentNumberofCollectables() { return NumberofCollectables; };
+
+	void IncrementNumberofCollectables(int32 Value);
+
+	void IncreaseMovementPowerup();
 
 private:
 	// 전력 질주 중인지 확인하는 bool 변수. 안전장치.
@@ -44,4 +53,10 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class APlayerProjectile> PlayerProjectile;
+
+	int32 NumberofCollectables;
+
+	bool bHasPowerupActive;
+
+	FTimerHandle PowerupHandle;
 };
